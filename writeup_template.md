@@ -29,20 +29,28 @@
 ---
 ### Writeup / README
 
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
-
-You're reading it!
-
 ### Kinematic Analysis
 #### 1. Run the forward_kinematics demo and evaluate the kr210.urdf.xacro file to perform kinematic analysis of Kuka KR210 robot and derive its DH parameters.
 
-Looking at the kr210.urdf.xacro file, we can start building out coordinates for the location of every joint's center in space. After doing some addition of position changes from joint to joint, we can see that these coordinates are like so:
+Looking at the kr210.urdf.xacro file, we can start building out coordinates for the location of every joint's center in space. After doing some addition of positional changes from joint to joint, we can see that these coordinates are as shown below:
 
 ![Joint coordinates as given by the urdf.][jointorigins]
 
-However the joint origins we want to set should mostly zero out all the Denavit-Hartenberg parameters we're dealing with. SO we can make a few translations of each joint's 'origin' to make the problem easy for us (by collapsing as many link lengths and joint offsets to 0!). I do that below, by simply shifting coordinates such that they line up as much as possible.
+However the joint origins we want to set should mostly zero out all the Denavit-Hartenberg parameters we're dealing with. So we can make a few translations of each joint's 'origin' to make the problem easy for us (by collapsing as many link lengths and joint offsets to 0!). I do that below, by simply shifting coordinates such that they line up as much as possible.
 
 ![DH origins of each joint.][DHorigins]
+
+With this new set of joint origins, and the **important assumption that the Z-axis for each joint's reference frame is it's axis of rotation**, we can derive the following set of DH parameters.
+
+joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
+--- | --- | --- | --- | ---
+1 | 0 | 0 | 0.75 | θ<sub>1</sub>
+2 | -90° | 0.35 | 0 | θ<sub>2</sub>
+3 | 0 | 1.25 | 0 | θ<sub>3</sub> 
+4 | -90° | -0.054 | 1.5 | θ<sub>4</sub>
+5 |  90° |  0 |  0  | θ<sub>5</sub>
+6 |  -90°   | 0 |    0   | θ<sub>6</sub>
+gripper | 0 | 0 | 0.303 | 0
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
@@ -53,14 +61,7 @@ Here's | A | Snappy | Table
 3 | *italic* | text | 403
 4 | 2 | 3 | abcd
 
-joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
---- | --- | --- | --- | ---
-1 | 0 | 0 | 0.75 | θ<sub>1</sub>
-2 | -90° | 0.35 | 0 | θ<sub>2</sub>
-3 | 0 | 1.25 | 0 | θ<sub>3</sub> 
-4 | -90° | -0.054 | 1.5 | θ<sub>4</sub>
-5 |  90° |  0 |  0  | θ<sub>5</sub>
-6 |  -90°   | 0 |    0   | θ<sub>6</sub>
+
 
 
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
