@@ -49,10 +49,12 @@ Here's | A | Snappy | Table
 
 joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
 --- | --- | --- | --- | ---
-1 | `highlight` | **bold** | 7.41 | 
-2 | a | b | c | 
-3 | *italic* | text | 403 | 
-4 | 2 | 3 | abcd | 
+1 | 0 | 0 | 0.75 | θ<sub>1</sub>
+2 | -90° | 0.35 | 0 | θ<sub>2</sub>
+3 | 0 | 1.25 | 0 | θ<sub>3</sub> 
+4 | -90° | -0.054 | 1.5 | θ<sub>4</sub>
+5 |  90° |  0 |  0  | θ<sub>5</sub>
+6 |  -90°   | 0 |    0   | θ<sub>6</sub>
 
 
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
