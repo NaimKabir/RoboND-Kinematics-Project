@@ -47,6 +47,14 @@ Here's | A | Snappy | Table
 3 | *italic* | text | 403
 4 | 2 | 3 | abcd
 
+joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
+--- | --- | --- | --- | ---
+1 | `highlight` | **bold** | 7.41 | 
+2 | a | b | c | 
+3 | *italic* | text | 403 | 
+4 | 2 | 3 | abcd | 
+
+
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
 
 And here's another image! 
