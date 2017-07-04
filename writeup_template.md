@@ -68,7 +68,7 @@ The generalized transformation between joints, as parametrized by DH parameters,
 
  .| .| . | .
 --- | --- | --- | ---
-cθ<sub>i</sub> | -sθ<sub>i</sub> | 0 |  α<sub>i-1</sub> 
+cθ<sub>i</sub> | -sθ<sub>i</sub> | 0 |  a<sub>i-1</sub> 
  sθ<sub>i</sub> * cα<sub>i-1</sub> |cθ<sub>i</sub> * cα<sub>i-1</sub> |   -sα<sub>i-1</sub>   |-sα<sub>i-1</sub> * d<sub>i</sub> 
  sθ<sub>i</sub> * sα<sub>i-1</sub> | cθ<sub>i</sub> * sα<sub>i-1</sub> | cα<sub>i-1</sub>  | cα<sub>i-1</sub> * d<sub>i</sub>
  0 | 0| 0 | 1
@@ -79,9 +79,18 @@ To create the transformation matrices between each link, all we have to do is su
 
  .| .| . | .
 --- | --- | --- | ---
-cθ<sub>i</sub> | -sθ<sub>i</sub> | 0 |  0 
- sθ<sub>i</sub>  |cθ<sub>i</sub>  |   0   | 0
- 0 | 0 | 1 | d<sub>i</sub>
+cθ<sub>1</sub> | -sθ<sub>1</sub> | 0 |  0 
+ sθ<sub>1</sub>  |cθ<sub>1</sub>  |   0   | 0
+ 0 | 0 | 1 | 0.75
+ 0 | 0| 0 | 1
+ 
+<sup>1</sup><sub>2</sub>**T** =
+
+ .| .| . | .
+--- | --- | --- | ---
+c(θ<sub>2</sub> - 90°)  | -s(θ<sub>2</sub> - 90°) | 0 |  0.35 
+ 0 |0 |   1   | 0 
+ -s(θ<sub>2</sub> - 90°)  | -c(θ<sub>2</sub> - 90°) | 0  | 0
  0 | 0| 0 | 1
 
 Here's | A | Snappy | Table
