@@ -42,9 +42,9 @@ However the joint origins we want to set should mostly zero out all the Denavit-
 
 With this new set of joint origins, and the **important assumption that the Z-axis for each joint's reference frame is its axis of rotation**, we can derive the following some DH parameters.
 
-Starting with joint 1, we can see that its Z is coincident with the base axis, so twist angles between the two are 0 as are the link lengths. However, the X-axes for both are offset by 0.75. It's angle of rotation will be the variable θ<sub>1</sub>.
+Starting with Joint 1, we can see that its Z-axis is coincident with the base axis, so twist angles between the two are 0 as are the link lengths. However, the X-axes for both are offset by 0.75. It's angle of rotation will be the variable θ<sub>1</sub>.
 
-Joint 2: Remembering that the Z-axis is actually shooting into the page (the axis of this joint's rotation), we can see that the Z<sub>1</sub> would have had to rotate clockwise about X<sub>1</sub> by 90° to match Z<sub>2</sub>, making its twist angle -90°. The Z's are also offset by Joint 2's positional change along the GLOBAL X-axis (to the right of the image), a link length of 0.35. There is no offset between X<sub>1</sub> and X<sub>2</sub> however, so the d<sub>2</sub> is 0. The angle of the joint here is a little tricky: it starts off with a 90° offset between X<sub>1</sub> and X<sub>2</sub> (X<sub>2</sub> is shooting upward along the global Rviz Z-axis). Because of this, any additional counterclockwise turn will 'eat' into this inital 90°. Thus the angle of joint 2 cant be described as the variable: θ<sub>2</sub> - 90°.
+Joint 2: Remembering that the Z-axis is actually shooting into the page (the axis of this joint's rotation), we can see that the Z<sub>1</sub> would have had to rotate clockwise about X<sub>1</sub> by 90° to match Z<sub>2</sub>, making its twist angle -90°. The Z's are also offset by Joint 2's positional change along the GLOBAL X-axis (to the right of the image), a link length of 0.35. There is no offset between X<sub>1</sub> and X<sub>2</sub> however, so the d<sub>2</sub> is 0. The angle of the joint here is a little tricky: it starts off with a 90° offset between X<sub>1</sub> and X<sub>2</sub> (X<sub>2</sub> is shooting upward along the global Rviz Z-axis). Because of this, any additional counterclockwise turn will 'eat' into this inital 90°. Thus the angle of joint 2 can be described as the variable: θ<sub>2</sub> - 90°.
 
 We can follow this same kind of spatial reasoning for each of the joints, finally compiling the table below:
 
@@ -58,9 +58,30 @@ joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
 6 |  -90°   | 0 |    0   | θ<sub>6</sub>
 gripper | 0 | 0 | 0.303 | 0
 
-The last set of parameters for the gripper was found by adding the X-offset between the gripper and link 6 (`0.11`) and the X-offset between link-6 and the DH origin of joint 6 (`0.193`).
+The last set of parameters for the gripper (not shown in the figures) was found by adding the X-offset between the gripper and link 6 (`0.11`) and the X-offset between link-6 and the DH origin of joint 6 (`0.193`).
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
+
+The generalized transformation between joints, as parametrized by DH parameters, takes this form, with *c* being a cosine function and *s* as a sine:
+
+**<sup>i-1</sup><sub>i</sub>T ** =
+
+ .| .| . | .
+--- | --- | --- | ---
+cθ<sub>i</sub> | -sθ<sub>i</sub> | 0 |  α<sub>i-1</sub> 
+ sθ<sub>i</sub> * cα<sub>i-1</sub> |cθ<sub>i</sub> * cα<sub>i-1</sub> |   -sα<sub>i-1</sub>   |-sα<sub>i-1</sub> * d<sub>i</sub> 
+ sθ<sub>i</sub> * sα<sub>i-1</sub> | cθ<sub>i</sub> * sα<sub>i-1</sub> | cα<sub>i-1</sub>  | cα<sub>i-1</sub> * d<sub>i</sub>
+ 0 | 0| 0 | 1
+ 
+To create the transformation matrices between each link, all we have to do is substitute our known values.
+
+** <sup>0</sup><sub>1</sub>T ** =
+ .| .| . | .
+--- | --- | --- | ---
+cθ<sub>i</sub> | -sθ<sub>i</sub> | 0 |  0 
+ sθ<sub>i</sub>  |cθ<sub>i</sub>  |   0   | 0
+ 0 | 0 | 1 | d<sub>i</sub>
+ 0 | 0| 0 | 1
 
 Here's | A | Snappy | Table
 --- | --- | --- | ---
