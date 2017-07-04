@@ -52,6 +52,8 @@ joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
 6 |  -90°   | 0 |    0   | θ<sub>6</sub>
 gripper | 0 | 0 | 0.303 | 0
 
+The last set of parameters for the gripper was found by adding the X-offset between the gripper and link 6 (`0.11`) and the X-offset between link-6 and the DH origin of joint 6 (`0.193`).
+
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
 Here's | A | Snappy | Table
