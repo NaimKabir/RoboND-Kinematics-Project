@@ -45,12 +45,14 @@ With this new set of joint origins, and the **important assumption that the Z-ax
 joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
 --- | --- | --- | --- | ---
 1 | 0 | 0 | 0.75 | θ<sub>1</sub>
-2 | -90° | 0.35 | 0 | θ<sub>2</sub>
+2 | -90° | 0.35 | 0 | θ<sub>2</sub> - 90°
 3 | 0 | 1.25 | 0 | θ<sub>3</sub> 
 4 | -90° | -0.054 | 1.5 | θ<sub>4</sub>
 5 |  90° |  0 |  0  | θ<sub>5</sub>
 6 |  -90°   | 0 |    0   | θ<sub>6</sub>
 gripper | 0 | 0 | 0.303 | 0
+
+The angle on joint 2 has a constant offset of -90° because X<sub>1</sub> and X<sub>2</sub> begin at a 90° angle, and any additional counterclockwise turn in X<sub>1</sub> will eat into this starting angle offset. 
 
 The last set of parameters for the gripper was found by adding the X-offset between the gripper and link 6 (`0.11`) and the X-offset between link-6 and the DH origin of joint 6 (`0.193`).
 
