@@ -40,7 +40,13 @@ However the joint origins we want to set should mostly zero out all the Denavit-
 
 ![DH origins of each joint.][DHorigins]
 
-With this new set of joint origins, and the **important assumption that the Z-axis for each joint's reference frame is its axis of rotation**, we can derive the following set of DH parameters.
+With this new set of joint origins, and the **important assumption that the Z-axis for each joint's reference frame is its axis of rotation**, we can derive the following some DH parameters.
+
+Starting with joint 1, we can see that its Z is coincident with the base axis, so twist angles between the two are 0 as are the link lengths. However, the X-axes for both are offset by 0.75. It's angle of rotation will be the variable θ<sub>1</sub>.
+
+Joint 2: Remembering that the Z-axis is actually shooting into the page (the axis of this joint's rotation), we can see that the Z<sub>1</sub> would have had to rotate clockwise about X<sub>1</sub> by 90° to match Z<sub>2</sub>, making its twist angle -90°. The Z's are also offset by Joint 2's positional change along the GLOBAL X-axis (to the right of the image), a link length of 0.35. There is no offset between X<sub>1</sub> and X<sub>2</sub> however, so the d<sub>2</sub> is 0. The angle of the joint here is a little tricky: it starts off with a 90° offset between X<sub>1</sub> and X<sub>2</sub> (X<sub>2</sub> is shooting upward along the global Rviz Z-axis). Because of this, any additional counterclockwise turn will 'eat' into this inital 90°. Thus the angle of joint 2 cant be described as the variable: θ<sub>2</sub> - 90°.
+
+We can follow this same kind of spatial reasoning for each of the joints, finally compiling the table below:
 
 joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
 --- | --- | --- | --- | ---
@@ -51,8 +57,6 @@ joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
 5 |  90° |  0 |  0  | θ<sub>5</sub>
 6 |  -90°   | 0 |    0   | θ<sub>6</sub>
 gripper | 0 | 0 | 0.303 | 0
-
-The angle on joint 2 has a constant offset of -90° because X<sub>1</sub> and X<sub>2</sub> begin at a 90° angle, and any additional counterclockwise turn in X<sub>1</sub> will eat into this starting angle offset. 
 
 The last set of parameters for the gripper was found by adding the X-offset between the gripper and link 6 (`0.11`) and the X-offset between link-6 and the DH origin of joint 6 (`0.193`).
 
