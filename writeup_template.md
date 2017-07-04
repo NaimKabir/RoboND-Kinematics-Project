@@ -40,7 +40,7 @@ However the joint origins we want to set should mostly zero out all the Denavit-
 
 ![DH origins of each joint.][DHorigins]
 
-With this new set of joint origins, and the **important assumption that the Z-axis for each joint's reference frame is it's axis of rotation**, we can derive the following set of DH parameters.
+With this new set of joint origins, and the **important assumption that the Z-axis for each joint's reference frame is its axis of rotation**, we can derive the following set of DH parameters.
 
 joint | α<sub>i-1<sub> | a<sub>i-1<sub> | d<sub>i</sub> | θ<sub>i</sub>
 --- | --- | --- | --- | ---
