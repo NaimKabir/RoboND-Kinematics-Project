@@ -40,7 +40,7 @@ def handle_calculate_IK(req):
 	    num_joints = 7      
 
             # Modified DH param dictionary
-	    dh = {c0: 0, a0: 0, d1 = 0.75, q1: q1,
+	    dh = {c0: 0, a0: 0, d1 : 0.75, q1: q1,
 		  c1: -pi/2, a1: 0.35, d2: 0, q2: q2 - (pi/2),	    
 		  c2: 0, a2: 1.25, d3: 0, q3: q3,
 		  c3: -pi/2, a3: -0.054, d4: 1.5, q4 : q4,
@@ -65,7 +65,7 @@ def handle_calculate_IK(req):
 	    for joint in range(num_joints):
 		last = str(joint)
 		current = str(joint + 1)
-		T[last + '_' + current] = D.subs({a = dh['a' + last], c = dh['c' + last], q = dh['q' + current], d = dh['d' + current]})
+		T[last + '_' + current] = D.subs({a : dh[symbols('a' + last)], c : dh[symbols('c' + last)], q : dh[symbols('q' + current)], d : dh[symbols('d' + current)]})
 		 
             
             # Extract end-effector position and orientation from request
