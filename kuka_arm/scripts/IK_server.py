@@ -36,14 +36,16 @@ def handle_calculate_IK(req):
 	    d1,d2,d3,d4,d5,d6,d7 = symbols('d1:8')
 	    a0,a1,a2,a3,a4,a5,a6 = symbols('a0:7')
 	    c0,c1,c2,c3,c4,c5,c6 = symbols('c0:7')
-      
+	    
+	    num_joints = 7      
+
             # Modified DH param dictionary
-	    dh = {c0: 0, a0: 0, d1 = 0.75,
+	    dh = {c0: 0, a0: 0, d1 = 0.75, q1: q1,
 		  c1: -pi/2, a1: 0.35, d2: 0, q2: q2 - (pi/2),	    
-		  c2: 0, a2: 1.25, d3: 0,
-		  c3: -pi/2, a3: -0.054, d4: 1.5,
-		  c4: pi/2, a4: 0, d5: 0,                                 
-		  c5: -pi/2, a5: 0, d6: 0,                                
+		  c2: 0, a2: 1.25, d3: 0, q3: q3,
+		  c3: -pi/2, a3: -0.054, d4: 1.5, q4 : q4,
+		  c4: pi/2, a4: 0, d5: 0, q5: q5,                                 
+		  c5: -pi/2, a5: 0, d6: 0,  q6: q6,                                
 		  c6: 0, a6: 0, d7: 0.303, q7: 0
 		  }
 
@@ -58,9 +60,13 @@ def handle_calculate_IK(req):
 			[sin(q)*sin(c), cos(q)*sin(c), cos(c),   cos(c)*d],
 			[            0,             0,      0,          1]])
 
-            # Create individual transformation matrices
-
-
+	    # Creating dictionary of transformation matrices
+	    T = {}
+	    for joint in range(num_joints):
+		last = str(joint)
+		current = str(joint + 1)
+		T[last + '_' + current] = D.subs({a = dh['a' + last], c = dh['c' + last], q = dh['q' + current], d = dh['d' + current]})
+		 
             
             # Extract end-effector position and orientation from request
 	    # px,py,pz = end-effector position
