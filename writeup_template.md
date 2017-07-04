@@ -64,7 +64,7 @@ The last set of parameters for the gripper (not shown in the figures) was found 
 
 The generalized transformation between joints, as parametrized by DH parameters, takes this form, with *c* being a cosine function and *s* as a sine:
 
-**<sup>i-1</sup><sub>i</sub>T ** =
+<sup>i-1</sup><sub>i</sub>**T** =
 
  .| .| . | .
 --- | --- | --- | ---
@@ -75,7 +75,8 @@ cθ<sub>i</sub> | -sθ<sub>i</sub> | 0 |  α<sub>i-1</sub>
  
 To create the transformation matrices between each link, all we have to do is substitute our known values.
 
-** <sup>0</sup><sub>1</sub>T ** =
+ <sup>0</sup><sub>1</sub>**T** =
+
  .| .| . | .
 --- | --- | --- | ---
 cθ<sub>i</sub> | -sθ<sub>i</sub> | 0 |  0 
