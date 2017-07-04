@@ -31,21 +31,32 @@ def handle_calculate_IK(req):
             # IK code starts here
             joint_trajectory_point = JointTrajectoryPoint()
 
-            # Define DH param symbols
-
-
-            
-            # Joint angle symbols
-
-
+            # Define DH param and joint angle symbols. a is linklength, d is X-offset, c is twist angle, q is joint angle.
+	    q1,q2,q3,q4,q5,q6,q7 = symbols('q1:8')
+	    d1,d2,d3,d4,d5,d6,d7 = symbols('d1:8')
+	    a0,a1,a2,a3,a4,a5,a6 = symbols('a0:7')
+	    c0,c1,c2,c3,c4,c5,c6 = symbols('c0:7')
       
-            # Modified DH params
+            # Modified DH param dictionary
+	    dh = {c0: 0, a0: 0, d1 = 0.75,
+		  c1: -pi/2, a1: 0.35, d2: 0, q2: q2 - (pi/2),	    
+		  c2: 0, a2: 1.25, d3: 0,
+		  c3: -pi/2, a3: -0.054, d4: 1.5,
+		  c4: pi/2, a4: 0, d5: 0,                                 
+		  c5: -pi/2, a5: 0, d6: 0,                                
+		  c6: 0, a6: 0, d7: 0.303, q7: 0
+		  }
 
+	    # Define Modified DH Transformation matrix, with the parameters of the last joint's twist angle (c), last joint's link length (a), this joint's angle (q), 
+	    a = symbols('a')
+	    c = symbols('c')
+	    q = symbols('q')
+	    d = symbols('d')
 
-            
-            # Define Modified DH Transformation matrix
-
-
+	    D = Matrix([[cos(q),	sin(q),         0,	        a],
+			[sin(q)*cos(c), cos(q)*cos(c), -sin(c), -sin(c)*d],
+			[sin(q)*sin(c), cos(q)*sin(c), cos(c),   cos(c)*d],
+			[            0,             0,      0,          1]])
 
             # Create individual transformation matrices
 
