@@ -93,15 +93,51 @@ c(θ<sub>2</sub> - 90°)  | -s(θ<sub>2</sub> - 90°) | 0 |  0.35
  -s(θ<sub>2</sub> - 90°)  | -c(θ<sub>2</sub> - 90°) | 0  | 0
  0 | 0| 0 | 1
 
-Here's | A | Snappy | Table
+<sup>2</sup><sub>3</sub>**T** =
+
+ .| .| . | .
 --- | --- | --- | ---
-1 | `highlight` | **bold** | 7.41
-2 | a | b | c
-3 | *italic* | text | 403
-4 | 2 | 3 | abcd
+cθ<sub>3</sub> | -sθ<sub>3</sub> | 0 |  1.25
+ sθ<sub>3</sub> |cθ<sub>3</sub> |   0   | 0 
+ 0 | 0 | 1  |  0
+ 0 | 0| 0 | 1
+ 
+ <sup>3</sup><sub>4</sub>**T** =
+ 
+  .| .| . | .
+--- | --- | --- | ---
+cθ<sub>4</sub> | -sθ<sub>4</sub> | 0 |  -0.054
+ 0 |0 |   1   | 1.5 
+ -sθ<sub>4</sub> | -cθ<sub>4</sub> | 0 | 0
+ 0 | 0| 0 | 1
+ 
+  <sup>4</sup><sub>5</sub>**T** =
+ 
+  
+   .| .| . | .
+--- | --- | --- | ---
+cθ<sub>5</sub> | -sθ<sub>5</sub> | 0 |  0
+ 0 |0 |   -1   | 0
+ sθ<sub>5</sub>  | cθ<sub>5</sub> | 0  | 0
+ 0 | 0| 0 | 1
+  
+ <sup>5</sup><sub>6</sub>**T** =
+ 
+  .| .| . | .
+--- | --- | --- | ---
+cθ<sub>6</sub> | -sθ<sub>6</sub> | 0 | 0
+ 0 |0 |   1   |0 
+ -sθ<sub>6</sub> | -cθ<sub>6</sub>  | 0  | 0
+ 0 | 0| 0 | 1
 
+<sup>6</sup><sub>gripper</sub>**T** =
 
-
+   .| .| . | .
+--- | --- | --- | ---
+1 | 0 | 0 |  0
+ 0|1 |   0   |0 
+ 0 | 0 | 1  | 0.303
+ 0 | 0| 0 | 1
 
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
 
