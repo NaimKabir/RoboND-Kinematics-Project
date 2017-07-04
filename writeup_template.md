@@ -20,6 +20,8 @@
 [image1]: ./misc_images/misc1.png
 [image2]: ./misc_images/misc2.png
 [image3]: ./misc_images/misc3.png
+[jointorigins]: ./misc_images/jointorigins.png
+[DHorigins]: ./misc_images/DHorigins.png
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/972/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -34,9 +36,13 @@ You're reading it!
 ### Kinematic Analysis
 #### 1. Run the forward_kinematics demo and evaluate the kr210.urdf.xacro file to perform kinematic analysis of Kuka KR210 robot and derive its DH parameters.
 
-Here is an example of how to include an image in your writeup.
+Looking at the kr210.urdf.xacro file, we can start building out coordinates for the location of every joint's center in space. After doing some addition of position changes from joint to joint, we can see that these coordinates are like so:
 
-![alt text][image1]
+![Joint coordinates as given by the urdf.][jointorigins]
+
+However the joint origins we want to set should mostly zero out all the Denavit-Hartenberg parameters we're dealing with. SO we can make a few translations of each joint's 'origin' to make the problem easy for us (by collapsing as many link lengths and joint offsets to 0!). I do that below, by simply shifting coordinates such that they line up as much as possible.
+
+![DH origins of each joint.][DHorigins]
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
