@@ -31,6 +31,10 @@ def handle_calculate_IK(req):
             # IK code starts here
             joint_trajectory_point = JointTrajectoryPoint()
 
+	
+            #Dealing with machine precision:
+	   # mp.dps = 35
+
             # Define DH param and joint angle symbols. a is linklength, d is X-offset, c is twist angle, q is joint angle.
 	    q1,q2,q3,q4,q5,q6,q7 = symbols('q1:8')
 	    d1,d2,d3,d4,d5,d6,d7 = symbols('d1:8')
@@ -54,19 +58,45 @@ def handle_calculate_IK(req):
 	    c = symbols('c')
 	    q = symbols('q')
 	    d = symbols('d')
+	    r = symbols('r')
 
-	    D = Matrix([[cos(q),	sin(q),         0,	        a],
+	    D = Matrix([[cos(q),	-sin(q),         0,	        a],
 			[sin(q)*cos(c), cos(q)*cos(c), -sin(c), -sin(c)*d],
 			[sin(q)*sin(c), cos(q)*sin(c), cos(c),   cos(c)*d],
 			[            0,             0,      0,          1]])
+
+	    #Defining some zero translation elementary rotation matrices so we can get joint reference frames looking the way they should
+	    R_x = Matrix([[ 1,              0,      0, 0],
+       		          [ 0,        cos(r), -sin(r), 0],
+       		          [ 0,        sin(r),  cos(r), 0],
+			  [ 0,             0,       0, 1]])
+
+	    R_y = Matrix([[ cos(r),        0,  sin(r), 0],
+	                  [       0,        1,      0, 0],
+	                  [-sin(r),        0,  cos(r), 0],
+	                  [ 0,             0,       0, 1]])
+
+	    R_z = Matrix([[ cos(r), -sin(r),        0, 0],
+	                  [ sin(r),  cos(r),        0, 0],
+	                  [ 0,              0,      1, 0],
+                          [ 0,             0,       0, 1]])
 
 	    # Creating dictionary of transformation matrices
 	    T = {}
 	    for joint in range(num_joints):
 		last = str(joint)
 		current = str(joint + 1)
-		T[last + '_' + current] = D.subs({a : dh[symbols('a' + last)], c : dh[symbols('c' + last)], q : dh[symbols('q' + current)], d : dh[symbols('d' + current)]})
-		 
+		dhT = D.subs({a : dh[symbols('a' + last)], c : dh[symbols('c' + last)], q : dh[symbols('q' + current)], d : dh[symbols('d' + current)]})
+		T[last + '_' + current] =  dhT
+
+	    #Getting incremental forward transforms:
+	    T0_2 = simplify(T['0_1'] * T['1_2'])
+	    T0_3 = simplify(T0_2 * T['2_3'])
+            T0_4 = simplify(T0_3 * T['3_4'])
+	    T0_5 = simplify(T0_4 * T['4_5'])
+	    T0_6 = simplify(T0_5 * T['5_6'])
+	    T0_7 = simplify(T0_6 * T['6_7'])	
+		
             
             # Extract end-effector position and orientation from request
 	    # px,py,pz = end-effector position
@@ -75,12 +105,17 @@ def handle_calculate_IK(req):
             py = req.poses[x].position.y
             pz = req.poses[x].position.z
 
+	    p = Matrix([[px],
+			[py],
+			[pz]])
+
             (roll, pitch, yaw) = tf.transformations.euler_from_quaternion(
                 [req.poses[x].orientation.x, req.poses[x].orientation.y,
                     req.poses[x].orientation.z, req.poses[x].orientation.w])
      
             # Calculate joint angles using Geometric IK method
-
+	    # First getting the wrist coordinates...
+            
 		
 
 
