@@ -41,7 +41,11 @@ def handle_calculate_IK(req):
 	    a0,a1,a2,a3,a4,a5,a6 = symbols('a0:7')
 	    c0,c1,c2,c3,c4,c5,c6 = symbols('c0:7')
 	    
-	    num_joints = 7      
+	    num_joints = 7
+
+	    # Joint angle limits
+	    dtr = pi/180.
+	    joint_lims = [(-185*dtr, 185*dtr), (-45*dtr, 85*dtr), (-210*dtr, 65*dtr), (-350*dtr, 350*dtr), (-125*dtr, 125*dtr), (-350*dtr, 350*dtr)]      
 
             # Modified DH param dictionary
 	    dh = {c0: 0, a0: 0, d1 : 0.75, q1: q1,
@@ -107,17 +111,52 @@ def handle_calculate_IK(req):
 
 	    p = Matrix([[px],
 			[py],
-			[pz]])
+			[pz],
+			 [1]])
 
             (roll, pitch, yaw) = tf.transformations.euler_from_quaternion(
                 [req.poses[x].orientation.x, req.poses[x].orientation.y,
                     req.poses[x].orientation.z, req.poses[x].orientation.w])
      
             # Calculate joint angles using Geometric IK method
-	    # First getting the wrist coordinates...
-            
+            theta1 = arctan(py, px)  #This gets the first joint to orient the robot correctly. Hopefully this is in the joint's limits because otherwise we're kind of out of luck.
+
+	    # The next two thetas are interrelated by an equation: sin(theta2) * length2 + cos(theta3)*length3 = distance, where the lengths refer to the respective link lengths of each. 
+	    # There is a constraint that applies to what theta2 and theta3 can be. First, theta2: it needs to end at a point such that the distance of that point from the requested position == length3
+	    # Varying theta2 draws a semi-circular arc, along which only a few points are distance 'length3' from the requested point. If I draw a circle around the reqpoint, then any points that intersect with the joint's
+	    # semi-circular arc should be good goal points!
+
+	    # First let's rotate the requested point such that it lies in the flat 2D plane of the joint's arc. We can do this by applying our hopefully correct theta1.
+	    req_p = R_z.subs({r: -1* theta1}) * p
+	
+	    def findCircleIntersect(l1_,l2_, jx_,jz_, px_,pz_):
+		l1,l2 = symbols('l1:3')
+		jx = symbols('jx')
+		jz = symbols('jz')
+		px = symbols('px')
+		pz = symbols('pz')
+		x = symbols('x')
+		y = symbols('y')
+
+		#I solved the solution for the intersection by hand, but symbolically recreated the important bits here:
+		y_ = ( l1**2 - l2**2 - jx**2 + px**2 - jz**2 + pz**2 - 2*x*(px - jx) ) / (  2*(pz - jz)  ) 
+
+		#Which we can substitute into this quadratic formula for x...
+		x_plus = (2*jx + sqrt(   (2*jx)**2 - 4*(  jx**2 + y**2 - 2*y*jz + jz**2 - l1**2 )  )  ) / 2
+		x_minus =(2*jx - sqrt(   (2*jx)**2 - 4*(  jx**2 + y**2 - 2*y*jz + jz**2 - l1**2 )  )  ) / 2
+		formula_plus = x_plus.subs({y: y_})
+		formula_minus = x_minus.subs({y:y_})
+
+		#Now we substitute real values we know to solve for x...
+		real_x = formula_plus.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_})
+		
 		
 
+
+	    # Getting the wrist coordinates (wc)...
+            end_Z = T0_7 * Matrix([[0],[0],[1],[0]])
+	    wc = p - (end_z * (dh[d4] + dh[d7]))
+		
 
             # Populate response for the IK request
             # In the next line replace theta1,theta2...,theta6 by your joint angle variables
