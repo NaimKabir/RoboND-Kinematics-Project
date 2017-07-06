@@ -138,19 +138,53 @@ def handle_calculate_IK(req):
 		x = symbols('x')
 		y = symbols('y')
 
-		#I solved the solution for the intersection by hand, but symbolically recreated the important bits here:
-		y_ = ( l1**2 - l2**2 - jx**2 + px**2 - jz**2 + pz**2 - 2*x*(px - jx) ) / (  2*(pz - jz)  ) 
+		if pz_ - jz_ != 0: #I dont want to ever divide by zero, so I use two different calculations depending.
 
-		#Which we can substitute into this quadratic formula for x...
-		x_plus = (2*jx + sqrt(   (2*jx)**2 - 4*(  jx**2 + y**2 - 2*y*jz + jz**2 - l1**2 )  )  ) / 2
-		x_minus =(2*jx - sqrt(   (2*jx)**2 - 4*(  jx**2 + y**2 - 2*y*jz + jz**2 - l1**2 )  )  ) / 2
-		formula_plus = x_plus.subs({y: y_})
-		formula_minus = x_minus.subs({y:y_})
+			#I solved the solution for the intersection by hand, but symbolically recreated the important bits here:
+			y_ = ( l1**2 - l2**2 - jx**2 + px**2 - jz**2 + pz**2 - 2*x*(px - jx) ) / (  2*(pz - jz)  ) 
 
-		#Now we substitute real values we know to solve for x...
-		real_x = formula_plus.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_})
+			#Which we can substitute into this quadratic formula for x...
+			x_plus = (2*jx + sqrt(   (2*jx)**2 - 4*(  jx**2 + y**2 - 2*y*jz + jz**2 - l1**2 )  )  ) / 2
+			x_minus =(2*jx - sqrt(   (2*jx)**2 - 4*(  jx**2 + y**2 - 2*y*jz + jz**2 - l1**2 )  )  ) / 2
+			formula_plus = x_plus.subs({y: y_})
+			formula_minus = x_minus.subs({y:y_})
+
+			#Now we substitute real values we know to solve for x...
+			plus_x = formula_plus.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_})
+			minus_x = formula_minus.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_})
+
+
+			print(plus_x)
+			print(minus_x)
+
+			#And now for y.
+			plus_y = y_.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_}).subs({x: plus_x})
+			minus_y = y_.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_}).subs({x: minus_x})
+
+		else:
+			#I solved the solution for the intersection by hand, but symbolically recreated the important bits here:
+                        x_ = ( l1**2 - l2**2 - jx**2 + px**2 - jz**2 + pz**2 - 2*y*(pz - jz) ) / (  2*(px - jx)  )
+
+                        #Which we can substitute into this quadratic formula for x...
+                        y_plus = (2*jz + sqrt(   (2*jz)**2 - 4*(  jz**2 + x**2 - 2*x*jx + jx**2 - l1**2 )  )  ) / 2
+                        y_minus =(2*jz - sqrt(   (2*jz)**2 - 4*(  jz**2 + x**2 - 2*x*jx + jx**2 - l1**2 )  )  ) / 2
+                        formula_plus = y_plus.subs({x: x_})
+                        formula_minus = y_minus.subs({x:x_})
+
+                        #Now we substitute real values we know to solve for x...
+                        plus_y = formula_plus.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_})
+                        minus_y = formula_minus.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_})
+
+
+                        print(plus_y)
+                        print(minus_y)
+
+                        #And now for y.
+                        plus_x = x_.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_}).subs({y: plus_y})
+                        minus_x = x_.subs({l1: l1_, l2: l2_, jx : jx_, jz: jz_, px: px_, pz : pz_}).subs({y: minus_y})
+
 		
-		
+		return [ (plus_x, plus_y), (minus_x, minus_y)]
 
 
 	    # Getting the wrist coordinates (wc)...
